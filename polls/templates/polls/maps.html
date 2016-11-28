@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+       #map {
+        height: 400px;
+        width: 100%;
+       }
+    </style>
+  </head>
+  <body>
+    <h3>My Google Maps Demo</h3>
+    <div id="map"></div>
+    <script>
+
+    var geocoder;
+    var map;
+    //var address = ['mumbai', 'california']
+    var addresses = [];
+    var sentiment = [];
+      function initMap() {
+
+        var uluru = {lat: 40.4168, lng: 3.7038};
+         map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 2,
+          center: uluru
+        });
+          /*var marker = new google.maps.Marker({
+          position: uluru,
+          map: map
+        });*/
+        geocoder = new google.maps.Geocoder();
+      
+        var tweets = {{plot | safe}};
+        if(tweets.length>0)
+        {
+           alert(tweets.length + " results found");
+           //alert(tweets);
+          for (i = 0; i < tweets.length; i++)
+          {
+            var item = tweets[i];
+            var item1 = item['lng'];
+           // alert(item1);
+            addresses[i] = item1;
+            var sentim = item['senti'];
+            //alert(sentim);
+            sentiment[i] = sentim;
+            convert_geocode(item1,sentim);
+          }
+        }
+        //alert("idhr aya");
+        //var addresses = ["New York City",'Boston','Matunga,Mumbai','London'];
+        //var sentiment = ['Negative','Positive','Positive','Neutral'];
+          
+       // for (var x =0;x<addresses.length;x++)
+       // convert_geocode(addresses[x],sentiment[x]);
+      }
+   
+        var image0 = 
+        {
+          url: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png'
+        }
+
+        var image1 = 
+        {
+          url: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png'
+        }
+
+        var image2 = 
+        {
+          url: 'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png'
+        }
+      function convert_geocode(address,sentiment){
+        //alert("Inside Geocode" +address[i]);
+       var image
+        if(sentiment=='neutral')
+          image=image2;
+        else if(sentiment=='positive')
+          image=image0;
+        else
+          image=image1;
+        geocoder.geocode({'address':address}, function(results,status){
+          if(status == google.maps.GeocoderStatus.OK){
+            //alert ("sentiment" + sentiment);
+            //alert(results[0].geometry.location);
+            var marker2 = new google.maps.Marker({
+            position: results[0].geometry.location,
+            animation: google.maps.Animation.DROP,
+            icon: image,
+            map: map
+        });
+          }
+          else {
+            alert ("Bad Code");
+          }
+        })
+
+      }
+    </script>
+        <div style="height: 100px; margin-left:10px; margin-top:10px; padding: 0px;">
+            <form name="form" action="/polls/map" method='POST'>
+                <select name="form">
+                    <option value="usa">usa</option>
+                    <option value="dhoni">dhoni</option>
+                    <option value="election">election</option>
+                    <option value="cloudcomputing">cloud computing</option>
+                    <option value="nyc">nyc</option>
+                    <option value="new year">new year</option>
+                    <option value="microsoft">microsoft</option>
+                    <option value="apple">apple</option>
+                    <option value="hollywood">hollywood</option>
+                    <option value="bollywood">bollywood</option>
+                </select>
+                <button type="submit">Find tweets</button>
+                {% csrf_token %}
+            </form>
+        </div>
+        <script async defer
+                        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD8I1tfNz5q6N1fTr16ky_uT9WqJeksUWI&callback=initMap"></script>
+        </script>
+   </body>
+</html>

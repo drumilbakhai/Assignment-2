@@ -1,0 +1,10 @@
+branch-defaults:
+  default:
+    environment: django-env
+global:
+  application_name: twitter-map
+  default_ec2_keyname: null
+  default_platform: python2.7
+  default_region: us-west-2
+  profile: eb-cli
+  sc: null

@@ -1,0 +1,95 @@
+
+
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+#map {
+    height: 500px;
+    width: 100%px;
+}
+        </style>
+    </head>
+    <body>
+        <div id="map"></div>
+        <script>
+function initMap() {
+    var uluru = {lat: -25.363, lng: 131.044};
+    var map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 4,
+        center: uluru
+    });
+    geocoder = new google.maps.Geocoder();
+    var marker = new google.maps.Marker({
+        position: uluru,
+        map: map
+    });
+    
+
+
+    var tweets = {{plot | safe}};
+       if(tweets.length>0){
+       alert(tweets.length + " results found");
+        for (i = 0; i < tweets.length; i++) 
+        {
+            var item = tweets[i];
+            //var latlng = new google.maps.LatLng(item['lat'], item['lng']);
+            geocoder.geocode({item}{
+          if(status == google.maps.GeocoderStatus.OK){
+            //alert ("Aweseom");
+           
+            var marker2 = new google.maps.Marker({
+            position: item.geometry.location,
+            animation: google.maps.Animation.DROP,
+            map: map
+        });
+          }
+          else {
+            alert ("Bad Code");
+          }
+        })
+            var marker = new google.maps.Marker({
+            position: latlng,
+            map: map,
+            }
+            
+            google.maps.event.addListener(marker, 'click', function() {
+                infowindow.open(map,marker);
+            });
+            var contentString = '<div id="content">'+
+                '<p>' + item[i]['info_window'] + '</p>'+
+                '</div>';
+            var infowindow = new google.maps.InfoWindow({
+                content: contentString
+            });
+            
+        }
+        map.setZoom(2);
+    }
+}
+        </script>
+        <div style="height: 100px; margin-left:10px; margin-top:10px; padding: 0px;">
+            <form name="form" action="/polls/map" method='POST'>
+                <select name="form">
+                    <option value="usa">usa</option>
+                    <option value="dhoni">dhoni</option>
+                    <option value="election">election</option>
+                    <option value="cloudcomputing">cloud computing</option>
+                    <option value="nyc">nyc</option>
+                    <option value="new year">new year</option>
+                    <option value="microsoft">microsoft</option>
+                    <option value="apple">apple</option>
+                    <option value="hollywood">hollywood</option>
+                    <option value="bollywood">bollywood</option>
+                </select>
+                <button type="submit">Find tweets</button>
+                {% csrf_token %}
+            </form>
+        </div>
+        <script async defer
+                        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCTjSna2Tx-OVJtJrxYrFtxBd1yX2w0LBA&callback=initMap"></script>
+        </script>
+    </body>
+</html>
+

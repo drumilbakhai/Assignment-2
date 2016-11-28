@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+       #map {
+        height: 400px;
+        width: 100%;
+       }
+    </style>
+  </head>
+  <body>
+    <h3>My Google Maps Demo</h3>
+    <div id="map"></div>
+    
+    </body>
+    <script>
+
+    var geocoder;
+    var map
+    var address = ['mumbai', 'california']
+
+
+      function initMap() {
+/*
+        var map2;
+        var elevator;
+        var myOptions = { zoom: 1,
+        center: new google.maps.LatLng(0, 0),mapTypeId: 'terrain'};
+
+        var address = ['New York City','Boston'];
+
+        map2 = new google.maps.Maps(document.getElementById('map'),myOptions);
+
+        for(var x =0; x< address.length;x++){
+          $.getJSON('http://maps.googleapis.com/maps/api/geocode/json?address='+address[x]+'&sensor=false', null, function (data) {
+            // body...
+            var p = data.results[0].geometry.location
+            var latlng = new google.maps.LatLng(p.lat,p.lng);
+              new google.maps.Marker({position:latlng, map:map2})
+          });
+        }*/
+
+        var uluru = {lat: 40.4168, lng: 3.7038};
+         map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 2,
+          center: uluru
+        });
+
+        // Tweets se utha and addresses mein daal
+        // Sentiments bhi array hai
+
+
+          /*var tweets = {{plot | safe}};
+       if(tweets.length>0)
+        {
+           alert(tweets.length + " results found");
+          for (i = 0; i < tweets.length; i++)
+          {
+            var item = tweets[i];
+            var addresses=item['lng']
+            var sentiment=item['senti']
+            convert_geocode(addresses,sentiment);
+          }
+         }
+*/
+
+        var addresses = ["New York City",'Boston','Matunga,Mumbai','London'];
+        var sentiment = ['Negative','Positive','Positive','Neutral'];
+        
+          geocoder = new google.maps.Geocoder();  
+        /*var marker = new google.maps.Marker({
+          position: uluru,
+          map: map
+        });*/
+        for (var x =0;x<addresses.length;x++)
+        convert_geocode(addresses[x],sentiment[x]);
+      }
+      
+      //var marker = new google.maps.Marker({
+        var image0 = 
+        {
+          url: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png'
+        }
+
+        var image1 = 
+        {
+          url: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png'
+        }
+
+        var image2 = 
+        {
+          url: 'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png'
+        }
+
+
+      function convert_geocode(address,sentiment){
+        //alert ("Inside Geocode" +address[i]);
+        var image;
+      //alert(sentiment);
+        if(sentiment=='Neutral')
+          image=image2;
+        else if(sentiment=='Positive')
+          image=image0;
+        else
+          image=image1;
+        //alert(image);
+        geocoder.geocode({'address':address}, function(results,status){
+          if(status == google.maps.GeocoderStatus.OK){
+            //alert ("sentiment" + sentiment);
+            //alert(results[0].geometry.location);
+            var marker2 = new google.maps.Marker({
+            position: results[0].geometry.location,
+            animation: google.maps.Animation.DROP,
+            icon:image, 
+            map: map
+        });
+          }
+          else {
+            //alert ("Bad Code");
+          }
+        })
+
+      }
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD8I1tfNz5q6N1fTr16ky_uT9WqJeksUWI&callback=initMap">
+    </script>
+</html>
