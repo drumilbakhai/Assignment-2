@@ -1,41 +1,32 @@
-# alchemyapi_python #
 
-A sdk for AlchemyAPI using Python - **_Please note that this legacy AlchemyAPI SDK is no longer supported by IBM. Please use the Watson SDKs https://github.com/watson-developer-cloud?utf8=✓&query=sdk_**
+Using the Amazon SQS service we create a processing queue for the Tweets that are delivered by the Twitter Streaming API.
+After storing into SQS, we store Amazon SNS service to update the status processing on each tweet so the UI can refresh.
+Integrate a third party cloud service API into the Tweet processing flow.
 
+1. Streaming
 
-## AlchemyAPI ##
+Reads a stream of tweets from the Twitter Streaming API. Note: you might follow a set of specific keywords that you find interesting
+After fetching a new tweet, check to see if it has geolocation info and is in English.
+Once the tweet validates these filters, send a message to SQS for asynchronous processing on the text of the tweet
 
-AlchemyAPI offers artificial intelligence as a service. We teach computers to learn how to read and see, and apply our technology to text analysis and image recognition through a cloud-based API. Our customers use AlchemyAPI to transform their unstructured content such as blog posts, news articles, social media posts and images into much more useful structured data. 
+2. Worker
 
-AlchemyAPI is a tech startup located in downtown Denver, Colorado. As the world’s most popular text analysis service, AlchemyAPI serves over 3.5 billion monthly API requests to over 35,000 developers. To enable our services, we use artificial intelligence, machine learning, neural networks, natural language processing and massive-scale web crawling. Our technology powers use cases in a variety of industry verticals, including social media monitoring, business intelligence, content recommendations, financial trading and targeted advertising.
+Define a worker pool that will pick up messages from the queue to process. These workers should each run on a separate pool thread.
+Make a call to the sentiment API off your preference (e.g. Alchemy (Links to an external site.)). This can return a positive, negative or neutral sentiment evaluation for the text of the submitted Tweet.
+As soon as the tweet is processed send a notification -using SNS- to an HTTP endpoint (Links to an external site.) that contains the information about the tweet.
 
-More information at: http://www.alchemyapi.com
+3. Backend
 
+On receiving the notification, index this tweet in Elasticsearch. Make sure you preserve the sentiment of the tweet as well.
+The backend should provide the functionality to the user to search for tweets that match a particular keyword. To this end, you can either write a new webserver or simply reuse your first assignment.
 
+4. Frontend
 
-## API Key ##
+When a new tweet is indexed, provide some visual indication on the frontend. 
+Give the user the ability to search your index via a free text input or a dropdown.
+Plot the tweets that match the query on a map. (use markers (Links to an external site.))
+Lastly, use a custom marker (Links to an external site.) to indicate the sentiment. Alternatively, you can come up with any other style to represent the sentiment of the tweet. 
+Deployment
 
-To use AlchemyAPI, you'll need to obtain an API key and attach that key to all requests. If you do not already have a key, please visit: http://www.alchemyapi.com/api/register.html
-
-
-
-## Requirements ##
-
-The Python SDK requires that you install the [Requests Python module](http://docs.python-requests.org/en/latest/user/install/#install).
-
-
-
-## Getting Started with the Python SDK ##
-
-To get started and run the example, simply:
-
-	git clone https://github.com/AlchemyAPI/alchemyapi_python.git
-	cd alchemyapi_python
-	python alchemyapi.py YOUR_API_KEY
-	python example.py
-
-
-Just replace YOUR_API_KEY with your 40 character API key from AlchemyAPI, and you should be good to go.
-
-	
-	
+Deploy your application, the streaming script, the worker etc. on AWS.
+You are free to use Elastic beanstalk or manually configure EC2 for deploying different components of your application.
