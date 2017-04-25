@@ -5,10 +5,10 @@ from tweepy import Stream
 import time
 import json
 
-con_key ='XsN14NyGhAMumZ5TCpYwnSnzI'
-con_secret ='3omWnyyBhlZPCNMoBR3GGpXsIzzjCHl4XKfh3gQqxWDXSY5u6G'
-acess_token ='114146024-DqyhbCcLnrefWB1pAVv0533VoDR8E3t1ZMuYpxgZ'
-acess_secret = 'p6E13yqgqRCHuy26UcVLFdIG1F4mWpaMRsfB5kfyzrN0x'
+con_key =''
+con_secret =''
+acess_token =''
+acess_secret = ''
 
 
 sqs = boto3.resource('sqs', region_name="us-west-2")
