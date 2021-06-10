@@ -1,4 +1,4 @@
-Django==1.10.2
+Django==2.2.24
 elasticsearch==5.0.0
 requests==2.11.1
 requests-aws4auth==0.9
